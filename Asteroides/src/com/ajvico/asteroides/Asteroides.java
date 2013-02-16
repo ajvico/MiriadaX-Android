@@ -23,7 +23,8 @@ public class Asteroides
       super.onCreate(savedInstanceState);
       setContentView(R.layout.main);
 
-      // Se añade un escuchador para el evento onClick del botón "Sobre el juego"
+      // Se añade un escuchador para el evento onClick del botón
+      // "Sobre el juego"
       bAcercaDe = (Button) findViewById(R.id.btnInfo);
       bAcercaDe.setOnClickListener(new OnClickListener()
       {
@@ -32,6 +33,17 @@ public class Asteroides
             lanzarAcercaDe(view);
          }
       });
+
+      // Se añade otro escuchador para el evento onClick del botón "Salir"
+      ((Button) findViewById(R.id.btnSalir))
+         .setOnClickListener(new OnClickListener()
+         {
+            @Override
+            public void onClick(View v)
+            {
+               finish();
+            }
+         });
    }
 
 
