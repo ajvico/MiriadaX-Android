@@ -8,5 +8,5 @@
    <string name="btnConfigurar">Settings</string>
    <string name="btnInfo">About</string>
    <string name="btnSalir">Exit</string>
-
+   <string name="textoAcercaDe">This game is an example for the Android application programming course in MiríadaX.\n\n<b>Ángel J. Vico</b> (2013).</string>
 </resources>
