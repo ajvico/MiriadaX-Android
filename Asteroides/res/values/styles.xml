@@ -14,6 +14,10 @@
    <style name="AppTheme" parent="AppBaseTheme">
       <!-- All customizations that are NOT specific to a particular API-level can go here. -->
    </style>
+   
+   <style name="layoutPortada">
+      <item name="android:padding">30dp</item>
+   </style>
 
    <style name="TextoAsteroides">
       <item name="android:textSize">@dimen/Titulo</item>
