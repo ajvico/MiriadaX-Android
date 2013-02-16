@@ -52,7 +52,6 @@
             android:id="@+id/btnInfo"
             style="@style/TextoAsteroides.Botones.Land"
             android:layout_height="wrap_content"
-            android:onClick="lanzarAcercaDe"
             android:text="@string/btnInfo"
             android:textSize="@dimen/textoBotones" />
 
