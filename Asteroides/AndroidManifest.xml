@@ -27,6 +27,7 @@
          android:label="@string/btnInfo"
          android:theme="@android:style/Theme.Dialog" >
       </activity>
+      <activity android:name="Preferencias" android:label="Opciones"></activity>
    </application>
 
 </manifest>

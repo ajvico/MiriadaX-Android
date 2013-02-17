@@ -46,12 +46,30 @@ public class Asteroides
                finish();
             }
          });
+
+      // Se añade otro escuchador para el evento onClick del botón "Opciones"
+      ((Button) findViewById(R.id.btnConfigurar))
+         .setOnClickListener(new OnClickListener()
+         {
+            @Override
+            public void onClick(View v)
+            {
+               lanzarPreferencias(v);
+            }
+         });
    }
 
 
    public void lanzarAcercaDe(View view)
    {
       Intent i = new Intent(this, AcercaDe.class);
+      startActivity(i);
+   }
+
+
+   public void lanzarPreferencias(View view)
+   {
+      Intent i = new Intent(this, Preferencias.class);
       startActivity(i);
    }
 
@@ -73,6 +91,10 @@ public class Asteroides
       {
          case R.id.acercaDe:
             lanzarAcercaDe(null);
+            break;
+
+         case R.id.config:
+            lanzarPreferencias(null);
             break;
       }
       return true; // true -> consumimos el item, no se propaga

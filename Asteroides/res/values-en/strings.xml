@@ -9,4 +9,10 @@
    <string name="btnInfo">About</string>
    <string name="btnSalir">Exit</string>
    <string name="textoAcercaDe">This game is an example for the Android application programming course in MiríadaX.\n\n<b>Ángel J. Vico</b> (2013).</string>
+   <string name="prefMusicaTitulo">Play music</string>
+   <string name="prefMusicaResumen">Music is playing in background</string>
+   <string name="prefGraficosTitulo">Graphics Type</string>
+   <string name="prefGraficosResumen">Select the graphic drawing style</string>
+   <string name="prefFragmentosTitulo">Fragment number</string>
+   <string name="prefFragmentosResumen">How many pieces is divided an asteroid</string>
 </resources>
