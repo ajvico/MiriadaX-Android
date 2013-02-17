@@ -16,4 +16,5 @@
    <string name="prefFragmentosTitulo">Fragment number</string>
    <string name="prefFragmentosResumen">How many pieces is divided an asteroid</string>
    <string name="btnPuntuaciones">High Scores</string>
+   <string name="listaPuntuacionesVacia">There is no high scores</string>
 </resources>

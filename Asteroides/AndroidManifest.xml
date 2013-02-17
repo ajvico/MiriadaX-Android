@@ -28,6 +28,7 @@
          android:theme="@android:style/Theme.Dialog" >
       </activity>
       <activity android:name="Preferencias" android:label="Opciones"></activity>
+      <activity android:name="Puntuaciones" android:label="@string/btnPuntuaciones"></activity>
    </application>
 
 </manifest>

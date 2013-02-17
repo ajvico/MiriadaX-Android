@@ -77,8 +77,8 @@ public class Asteroides
    }
 
    public void lanzarPuntuaciones(View view) {
-//      Intent i = new Intent(this, Puntuaciones.class);
-//      startActivity(i);
+      Intent i = new Intent(this, Puntuaciones.class);
+      startActivity(i);
    }
 
    @Override
