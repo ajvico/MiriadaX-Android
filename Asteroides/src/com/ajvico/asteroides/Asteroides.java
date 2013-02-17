@@ -14,6 +14,9 @@ import android.widget.Button;
 public class Asteroides
    extends Activity
 {
+   // Variable de clase para guardar la lista de puntuaciones
+   public static IAlmacenPuntuaciones almacen = new AlmacenPuntuacionesArray();
+
    // Referencia para el botón "Sobre el juego".
    // Se usa para añadirle un escuchador para el evento onClick
    private Button bAcercaDe;
@@ -37,13 +40,13 @@ public class Asteroides
       });
 
       // Se añade otro escuchador para el evento onClick del botón "Salir"
-      ((Button) findViewById(R.id.btnSalir))
+      ((Button) findViewById(R.id.btnPuntuaciones))
          .setOnClickListener(new OnClickListener()
          {
             @Override
             public void onClick(View v)
             {
-               finish();
+               lanzarPuntuaciones(v);
             }
          });
 
@@ -73,6 +76,10 @@ public class Asteroides
       startActivity(i);
    }
 
+   public void lanzarPuntuaciones(View view) {
+//      Intent i = new Intent(this, Puntuaciones.class);
+//      startActivity(i);
+   }
 
    @Override
    public boolean onCreateOptionsMenu(Menu menu)
@@ -95,6 +102,10 @@ public class Asteroides
 
          case R.id.config:
             lanzarPreferencias(null);
+            break;
+
+         case R.id.salir:
+            finish();
             break;
       }
       return true; // true -> consumimos el item, no se propaga

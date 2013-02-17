@@ -38,10 +38,10 @@
       android:text="@string/btnInfo" />
 
    <Button
-      android:id="@+id/btnSalir"
+      android:id="@+id/btnPuntuaciones"
       style="@style/TextoAsteroides.Botones"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:text="@string/btnSalir" />
+      android:text="@string/btnPuntuaciones" />
 
 </LinearLayout>

@@ -56,10 +56,10 @@
             android:textSize="@dimen/textoBotones" />
 
          <Button
-            android:id="@+id/btnSalir"
+            android:id="@+id/btnPuntuaciones"
             style="@style/TextoAsteroides.Botones.Land"
             android:layout_height="wrap_content"
-            android:text="@string/btnSalir"
+            android:text="@string/btnPuntuaciones"
             android:textSize="@dimen/textoBotones" />
       </TableRow>
    </TableLayout>

@@ -6,6 +6,15 @@
       android:icon="@android:drawable/ic_menu_preferences"
       android:title="@string/btnConfigurar">
    </item>
-   <item android:id="@+id/acercaDe" android:icon="@android:drawable/ic_menu_info_details" android:title="@string/btnInfo"></item>
-
+   <item
+      android:id="@+id/acercaDe"
+      android:icon="@android:drawable/ic_menu_info_details"
+      android:title="@string/btnInfo">
+   </item>
+   <item
+      android:id="@+id/salir"
+      android:icon="@android:drawable/ic_menu_close_clear_cancel"
+      android:title="@string/btnSalir">
+   </item>
+   
 </menu>

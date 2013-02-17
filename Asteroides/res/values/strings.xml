@@ -7,7 +7,7 @@
    <string name="btnJugar">Jugar</string>
    <string name="btnConfigurar">Opciones</string>
    <string name="btnInfo">Sobre el juego</string>
-   <string name="btnSalir">Salir</string>
+   <string name="btnPuntuaciones">Puntuaciones</string>
    <string name="textoAcercaDe">Juego realizado como ejemplo en el curso de programación de aplicaciones Android en MiríadaX.\n\n<b>Ángel J. Vico</b> (2013).</string>
    <string name="prefMusicaTitulo">Reproducir música</string>
    <string name="prefMusicaResumen">Se reproduce música de fondo</string>
@@ -15,5 +15,6 @@
    <string name="prefGraficosResumen">Se escoge la representación de gráficos</string>
    <string name="prefFragmentosTitulo">Número de fragmentos</string>
    <string name="prefFragmentosResumen">En cuántos trozos se divide un asteroide</string>
+   <string name="btnSalir">Salir</string>
 
 </resources>
