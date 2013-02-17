@@ -17,4 +17,7 @@
    <string name="prefFragmentosResumen">How many pieces is divided an asteroid</string>
    <string name="btnPuntuaciones">High Scores</string>
    <string name="listaPuntuacionesVacia">There is no high scores</string>
+   <string name="subtituloPuntuacion">Another text</string>
+   <string name="descIconoPuntuaciones">Player score</string>
+   
 </resources>
