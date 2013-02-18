@@ -19,5 +19,6 @@
    <string name="listaPuntuacionesVacia">There is no high scores</string>
    <string name="subtituloPuntuacion">Another text</string>
    <string name="descIconoPuntuaciones">Player score</string>
+   <string name="textoSeleccionPuntuacion">Selection</string>
    
 </resources>
