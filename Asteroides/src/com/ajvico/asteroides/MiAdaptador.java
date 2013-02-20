@@ -11,13 +11,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+/**
+ * Adaptador para cargar puntuaciones en un ListView.
+ */
 public class MiAdaptador
    extends BaseAdapter
 {
-   // Actividad a la que se asocia el adaptador
+   /**
+    * Actividad a la que se asocia el adaptador.
+    */
    private final Activity actividad;
 
-   // Lista de puntuaciones y nombres que se mostrarán en la actividad
+   /**
+    * Lista de puntuaciones y nombres que se mostrarán en la actividad
+    */
    private final Vector<String> lista;
 
 

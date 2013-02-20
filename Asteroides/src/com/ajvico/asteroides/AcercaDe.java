@@ -4,10 +4,15 @@ import android.app.Activity;
 import android.os.Bundle;
 
 
+/**
+ * Actividad que muestra información general sobre el juego.
+ */
 public class AcercaDe
    extends Activity
 {
-   /** Called when the activity is first created. */
+   /**
+    * @see android.app.Activity#onCreate(android.os.Bundle)
+    */
    @Override
    public void onCreate(Bundle savedInstanceState)
    {

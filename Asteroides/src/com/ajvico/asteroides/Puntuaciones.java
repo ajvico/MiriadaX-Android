@@ -7,9 +7,15 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
+/**
+ * Actividad que muestra las mejores puntuaciones obtenidas en el juego.
+ */
 public class Puntuaciones
    extends ListActivity
 {
+   /**
+    * @see android.app.Activity#onCreate(android.os.Bundle)
+    */
    @Override
    public void onCreate(Bundle savedInstanceState)
    {

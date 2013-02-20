@@ -11,17 +11,28 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 
+/**
+ * Actividad principal del juego.
+ * Contiene el menú principal, que da acceso al resto de actividades del juego.
+ */
 public class Asteroides
    extends Activity
 {
-   // Variable de clase para guardar la lista de puntuaciones
+   /**
+    * Variable de clase para guardar la lista de puntuaciones.
+    */
    public static IAlmacenPuntuaciones almacen = new AlmacenPuntuacionesArray();
 
-   // Referencia para el botón "Sobre el juego".
-   // Se usa para añadirle un escuchador para el evento onClick
+   /**
+    * Referencia para el botón "Sobre el juego".
+    * Se usa para añadirle un escuchador para el evento onClick
+    */
    private Button bAcercaDe;
 
 
+   /**
+    * @see android.app.Activity#onCreate(android.os.Bundle)
+    */
    @Override
    protected void onCreate(Bundle savedInstanceState)
    {
@@ -63,6 +74,12 @@ public class Asteroides
    }
 
 
+   /**
+    * Lanza la actividad AcercaDe.
+    * 
+    * @param view
+    *        Vista que ha generado el evento para lanzar la actividad.
+    */
    public void lanzarAcercaDe(View view)
    {
       Intent i = new Intent(this, AcercaDe.class);
@@ -70,27 +87,65 @@ public class Asteroides
    }
 
 
+   /**
+    * Lanza la actividad Preferencias.
+    * 
+    * @param view
+    *        Vista que ha generado el evento para lanzar la actividad.
+    */
    public void lanzarPreferencias(View view)
    {
       Intent i = new Intent(this, Preferencias.class);
       startActivity(i);
    }
 
-   public void lanzarPuntuaciones(View view) {
+
+   /**
+    * Lanza la actividad Puntuaciones.
+    * 
+    * @param view
+    *        Vista que ha generado el evento para lanzar la actividad.
+    */
+   public void lanzarPuntuaciones(View view)
+   {
       Intent i = new Intent(this, Puntuaciones.class);
       startActivity(i);
    }
 
+
+   /**
+    * Método que se ejecuta cuando se va a mostrar el menú de la actividad.
+    * Se encarga de crear el menú
+    * 
+    * @param menu
+    *        Vista menú en la que hay que construir el menú que se mostrará,
+    * @return
+    *         True si el menú se tiene que visualizar. False en caso
+    *         contrario.
+    * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+    */
    @Override
    public boolean onCreateOptionsMenu(Menu menu)
    {
       super.onCreateOptionsMenu(menu);
       MenuInflater inflater = getMenuInflater();
       inflater.inflate(R.menu.menu, menu);
-      return true; // true -> el menú ya está visible
+      return true; // true -> hay que visualizar el menú
    }
 
 
+   /**
+    * Método que se ejecuta cuando se selecciona una opción del menú de la
+    * actividad.
+    * Permite realizar la acción asociada a dicha opción del menú.
+    * 
+    * @param item
+    *        Elemento del menú sobre el que se ha pulsado.
+    * @return
+    *         True si la opción del menú se procesa en este método. False si se
+    *         deja que sea el sistema el que la procese.
+    * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+    */
    @Override
    public boolean onOptionsItemSelected(MenuItem item)
    {
@@ -105,6 +160,8 @@ public class Asteroides
             break;
 
          case R.id.salir:
+            // Cerramos la actividad. Como es la principal, se cerrará toda la
+            // aplicación
             finish();
             break;
       }
