@@ -71,6 +71,30 @@ public class Asteroides
                lanzarPreferencias(v);
             }
          });
+
+      // Se añade otro escuchador para el evento onClick del botón "Jugar"
+      ((Button) findViewById(R.id.btnJugar))
+         .setOnClickListener(new OnClickListener()
+         {
+            @Override
+            public void onClick(View v)
+            {
+               lanzarJuego(v);
+            }
+         });
+   }
+
+
+   /**
+    * Lanza la actividad Juego.
+    * 
+    * @param view
+    *        Vista que ha generado el evento para lanzar la actividad.
+    */
+   public void lanzarJuego(View view)
+   {
+      Intent i = new Intent(this, Juego.class);
+      startActivity(i);
    }
 
 
