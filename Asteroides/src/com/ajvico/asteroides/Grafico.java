@@ -5,63 +5,158 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 
 
+/**
+ * Clase privada para gestionar los elementos gráficos del juego.
+ */
 class Grafico
 {
-   private Drawable drawable; // Imagen que dibujaremos
+   /**
+    * Imagen que dibujaremos.
+    */
+   private Drawable drawable;
 
-   private double posX, posY; // Posición
+   /**
+    * Coordenada X del elemento gráfico.
+    */
+   private double posX;
 
-   private double incX, incY; // Velocidad desplazamiento
+   /**
+    * Coordenada Y del elemento gráfico.
+    */
+   private double posY;
 
-   private int angulo, rotacion;// Ángulo y velocidad rotación
+   /**
+    * Velocidad de desplazamiento en el eje X.
+    */
+   private double incX;
 
-   private int ancho, alto; // Dimensiones de la imagen
+   /**
+    * Velocidad de desplazamiento en el eje Y.
+    */
+   private double incY;
 
-   private int radioColision; // Para determinar colisión
+   /**
+    * Ánglulo de rotación.
+    */
+   private int angulo;
 
-   // Donde dibujamos el gráfico (usada en view.invalidate)
+   /**
+    * Velocidad de rotación.
+    */
+   private int rotacion;
+
+   /**
+    * Ancho de la imagen del elemento gráfico.
+    */
+   private int ancho;
+
+   /**
+    * Alto de la imagen del elemento gráfico.
+    */
+   private int alto;
+
+   /**
+    * Para determinar la colisión de un elemento gráfico con otro.
+    */
+   private int radioColision;
+
+   /**
+    * Dónde dibujamos el gráfico (usada en view.invalidate).
+    */
    private View view;
 
-   // Para determinar el espacio a borrar (view.invalidate)
+   /**
+    * Para determinar el espacio a borrar (view.invalidate).
+    */
    public static final int MAX_VELOCIDAD = 20;
 
 
+   /**
+    * Constructor de la clase.
+    * 
+    * @param view
+    *        Vista sobre la que dibujaremos el elemento gráfico.
+    * @param drawable
+    *        Imagen que hay que dibujar.
+    */
    public Grafico(
       View view,
       Drawable drawable)
    {
+      // Guardamos los parámetros recibidos en la clase
       this.view = view;
       this.drawable = drawable;
+
+      // Obtenemos las dimensiones de la imagen a dibujar
       ancho = drawable.getIntrinsicWidth();
       alto = drawable.getIntrinsicHeight();
+
+      // Calculamos el radio de colisión según el tamaño de la imagen
       radioColision = (alto + ancho) / 4;
    }
 
 
+   /**
+    * Método que se encarga de pintar el elemento gráfico en el lienzo
+    * suministrado.
+    * 
+    * @param canvas
+    *        Lienzo en el que se pintará el elemento gráfico.
+    */
    public void dibujaGrafico(Canvas canvas)
    {
+      // Guardamos la matriz y el área de recorte actuales
       canvas.save();
 
+      // Obtenemos las coordenadas actuales del centro del elemento
       int x = (int) (posX + ancho / 2);
       int y = (int) (posY + alto / 2);
+
+      // Rotamos el elemento sobre su centro, según el ángulo actual
       canvas.rotate((float) angulo, (float) x, (float) y);
 
+      // Definimos el área dónde se dibujará el elemento gráfico, según sus
+      // coordenadas actuales y sus dimensiones
       drawable.setBounds(
          (int) posX,
          (int) posY,
          (int) posX + ancho,
          (int) posY + alto);
+
+      // Dibujamos el elemento gráfico en el lienzo proporcionado
       drawable.draw(canvas);
 
+      // Restauramos la matriz y el área de recorte del lienzo para que los
+      // ajustes realizados en este elemento gráfico no afecten al resto de
+      // cosas que se pinten en dicho lienzo
       canvas.restore();
 
+      // Calculamos el área máxima que puede ocupar el elemento gráfico al
+      // desplazarse
       int rInval = (int) Math.hypot(ancho, alto) / 2 + MAX_VELOCIDAD;
+
+      // Forzamos a que se vuelva a dibujar el área máxima que se ha podido ver
+      // afectada por el movimiento que ha realizado el elemento gráfico
       view.invalidate(x - rInval, y - rInval, x + rInval, y + rInval);
    }
 
 
+   /**
+    * Método que desplaza el elemento gráfico a unas nuevas coordenadas al
+    * tiempo que modifica su ángulo.
+    * Para ello tiene en cuenta su posición y velocidad actual. También se puede
+    * suministrar un factor para afectar tanto a la velocidad de desplazamiento
+    * como a la de giro.
+    * Si al desplazar el elemento este queda fuera de la pantalla, se le hace
+    * aparecer por el lado opuesto.
+    * 
+    * @param factor
+    *        Factor de multiplicación que permite variar la velocidad de
+    *        desplazamiento y la de giro del elemento gráfico.
+    */
    public void incrementaPos(double factor)
    {
+      // Desplazamos el elemento en el eje X.
       posX += incX * factor;
 
       // Si salimos de la pantalla, corregimos posición
@@ -75,8 +170,10 @@ class Grafico
          posX = -ancho / 2;
       }
 
+      // Desplazamos el elemento en el eje Y
       posY += incY * factor;
 
+      // Si salimos de la pantalla, corregimos posición
       if (posY < -alto / 2)
       {
          posY = view.getHeight() - alto / 2;
@@ -87,16 +184,36 @@ class Grafico
          posY = -alto / 2;
       }
 
-      angulo += rotacion * factor; // Actualizamos ángulo
+      // Giramos el elemento
+      angulo += rotacion * factor;
    }
 
 
+   /**
+    * Método que permite obtener la distancia entre dos elementos gráficos (el
+    * actual y el que se suministra como parámetro).
+    * 
+    * @param g
+    *        Elemento gráfico desde el que se mide la distancia al actual.
+    * @return
+    *         La distancia entre el elemento actual y el suministrado.
+    */
    public double distancia(Grafico g)
    {
       return Math.hypot(posX - g.posX, posY - g.posY);
    }
 
 
+   /**
+    * Determina si el elemento actual ha colisionado con el que se proporciona
+    * como parámetro, según el radio de colisión asignado.
+    * 
+    * @param g
+    *        Elemento gráfico para el que se comprueba la colisión.
+    * @return
+    *         True si el elemento actual está en colisión con el elemento
+    *         gráfico suministrado.
+    */
    public boolean verificaColision(Grafico g)
    {
       return (distancia(g) < (radioColision + g.radioColision));
