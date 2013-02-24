@@ -19,18 +19,21 @@
 
    <style name="layoutPortada">
       <item name="android:padding">30dp</item>
+      <item name="android:background">@drawable/degradado</item>
    </style>
 
    <style name="TextoAsteroides">
       <item name="android:textSize">@dimen/Titulo</item>
       <item name="android:gravity">center_horizontal</item>
       <item name="android:typeface">sans</item>
+      <item name="android:textColor">@color/colorTitulo</item>
    </style>
 
    <style name="TextoAsteroides.Botones">
       <item name="android:textSize">@dimen/textoBotones</item>
       <item name="android:gravity">center</item>
-      </style>
+      <item name="android:textColor">@color/colorTextoBotones</item>
+   </style>
 
    <style name="TextoAsteroides.Botones.Land">
       <item name="android:textSize">@dimen/textoBotones</item>
