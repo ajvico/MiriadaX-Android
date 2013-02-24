@@ -12,10 +12,23 @@ import android.view.View;
 public class VistaJuego
    extends View
 {
+   // ////NAVE //////
+   private Grafico nave;// Gráfico de la nave
+
+   private int giroNave; // Incremento de dirección
+
+   private float aceleracionNave; // aumento de velocidad
+
+   // Incremento estándar de giro y aceleración
+
+   private static final int PASO_GIRO_NAVE = 5;
+
+   private static final float PASO_ACELERACION_NAVE = 0.5f;
+
    // //// ASTEROIDES //////
 
-   // Vector con los Asteroides
-   private Vector<Grafico> Asteroides;
+   // Vector con los asteroides
+   private Vector<Grafico> asteroides;
 
    // Número inicial de asteroides
    private int numAsteroides = 5;
@@ -32,10 +45,12 @@ public class VistaJuego
 
       Drawable drawableNave, drawableAsteroide, drawableMisil;
 
+      drawableNave = context.getResources().getDrawable(R.drawable.nave);
       drawableAsteroide =
          context.getResources().getDrawable(R.drawable.asteroide1);
-      
-      Asteroides = new Vector<Grafico>();
+
+      nave = new Grafico(this, drawableNave);
+      asteroides = new Vector<Grafico>();
 
       for (int i = 0; i < numAsteroides; i++)
       {
@@ -44,7 +59,7 @@ public class VistaJuego
          asteroide.setIncX(Math.random() * 4 - 2);
          asteroide.setAngulo((int) (Math.random() * 360));
          asteroide.setRotacion((int) (Math.random() * 8 - 4));
-         Asteroides.add(asteroide);
+         asteroides.add(asteroide);
       }
    }
 
@@ -59,10 +74,17 @@ public class VistaJuego
       super.onSizeChanged(ancho, alto, ancho_anter, alto_anter);
 
       // Una vez que conocemos nuestro ancho y alto.
-      for (Grafico asteroide : Asteroides)
+      nave.setPosX((ancho - nave.getAncho()) / 2);
+      nave.setPosY((alto - nave.getAlto()) / 2);
+
+      for (Grafico asteroide : asteroides)
       {
-         asteroide.setPosX(Math.random() * (ancho - asteroide.getAncho()));
-         asteroide.setPosY(Math.random() * (alto - asteroide.getAlto()));
+         do
+         {
+            asteroide.setPosX(Math.random() * (ancho - asteroide.getAncho()));
+            asteroide.setPosY(Math.random() * (alto - asteroide.getAlto()));
+         }
+         while (asteroide.distancia(nave) < (ancho + alto) / 5);
       }
    }
 
@@ -71,7 +93,10 @@ public class VistaJuego
    protected void onDraw(Canvas canvas)
    {
       super.onDraw(canvas);
-      for (Grafico asteroide : Asteroides)
+
+      nave.dibujaGrafico(canvas);
+
+      for (Grafico asteroide : asteroides)
       {
          asteroide.dibujaGrafico(canvas);
       }
