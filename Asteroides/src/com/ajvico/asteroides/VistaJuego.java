@@ -69,7 +69,7 @@ public class VistaJuego
    /**
     * Cada cuanto queremos procesar cambios (ms).
     */
-   private static int PERIODO_PROCESO = 50;
+   private static int PERIODO_PROCESO = 40;
 
    /**
     * Cuando se realizó el último proceso.
@@ -156,7 +156,7 @@ public class VistaJuego
          }
          while (asteroide.distancia(nave) < (ancho + alto) / 5);
       }
-      
+
       // Iniciamos el hilo que controla los elementos del juego
       ultimoProceso = System.currentTimeMillis();
       thread.start();
@@ -241,7 +241,18 @@ public class VistaJuego
       {
          while (true)
          {
+            // Actualizamos la posición de los elementos del juego
             actualizaFisica();
+            
+            // Dormimos el hilo hasta que toque actualizar de nuevo
+            try
+            {
+               Thread.sleep(PERIODO_PROCESO);
+            }
+            catch (InterruptedException e)
+            {
+               Thread.currentThread().interrupt();
+            }
          }
       }
    } // class ThreadJuego
