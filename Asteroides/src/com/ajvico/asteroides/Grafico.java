@@ -56,6 +56,12 @@ class Grafico
    private int alto;
 
    /**
+    * Radio de la circunferencia en la que se circunscribe el elemento, según
+    * sus dimensiones.
+    */
+   private int radio_elemento;
+
+   /**
     * Para determinar la colisión de un elemento gráfico con otro.
     */
    private int radioColision;
@@ -93,6 +99,10 @@ class Grafico
 
       // Calculamos el radio de colisión según el tamaño de la imagen
       radioColision = (alto + ancho) / 4;
+
+      // Calculamos el radio de la circunferencia en la que se circunscribe el
+      // elemento
+      radio_elemento = (int) Math.hypot(ancho, alto) / 2;
    }
 
 
@@ -131,13 +141,14 @@ class Grafico
       // cosas que se pinten en dicho lienzo
       canvas.restore();
 
-      // Calculamos el área máxima que puede ocupar el elemento gráfico al
-      // desplazarse
-      int rInval = (int) Math.hypot(ancho, alto) / 2 + MAX_VELOCIDAD;
-
-      // Forzamos a que se vuelva a dibujar el área máxima que se ha podido ver
-      // afectada por el movimiento que ha realizado el elemento gráfico
-      view.invalidate(x - rInval, y - rInval, x + rInval, y + rInval);
+      // // Calculamos el área máxima que puede ocupar el elemento gráfico al
+      // // desplazarse
+      // int rInval = (int) Math.hypot(ancho, alto) / 2 + MAX_VELOCIDAD;
+      //
+      // // Forzamos a que se vuelva a dibujar el área máxima que se ha podido
+      // ver
+      // // afectada por el movimiento que ha realizado el elemento gráfico
+      // view.invalidate(x - rInval, y - rInval, x + rInval, y + rInval);
    }
 
 
@@ -156,6 +167,10 @@ class Grafico
     */
    public void incrementaPos(double factor)
    {
+      boolean fuera_pantalla = false;
+      double posX_ini = posX;
+      double posY_ini = posY;
+
       // Desplazamos el elemento en el eje X.
       posX += incX * factor;
 
@@ -163,11 +178,13 @@ class Grafico
       if (posX < -ancho / 2)
       {
          posX = view.getWidth() - ancho / 2;
+         fuera_pantalla = true;
       }
 
       if (posX > view.getWidth() - ancho / 2)
       {
          posX = -ancho / 2;
+         fuera_pantalla = true;
       }
 
       // Desplazamos el elemento en el eje Y
@@ -177,15 +194,46 @@ class Grafico
       if (posY < -alto / 2)
       {
          posY = view.getHeight() - alto / 2;
+         fuera_pantalla = true;
       }
 
       if (posY > view.getHeight() - alto / 2)
       {
          posY = -alto / 2;
+         fuera_pantalla = true;
       }
 
       // Giramos el elemento
       angulo += rotacion * factor;
+
+      // Si nos hemos salido de la pantalla hay que invalidar también la zona
+      // que ocupaba el elemento antes, para que se actualice correctamente
+      if (fuera_pantalla)
+      {
+         // Obtenemos las coordenadas anteriores del centro del elemento
+         int x_ini = (int) (posX_ini + ancho / 2);
+         int y_ini = (int) (posY_ini + alto / 2);
+
+         // Forzamos a que se vuelva a dibujar el área que ocupaba el elemento
+         // antes de salir por el borde de la pantalla
+         view.postInvalidate(
+            x_ini - radio_elemento,
+            y_ini - radio_elemento,
+            x_ini + radio_elemento,
+            y_ini + radio_elemento);
+      }
+
+      // Obtenemos las coordenadas actuales del centro del elemento
+      int x = (int) (posX + ancho / 2);
+      int y = (int) (posY + alto / 2);
+
+      // Obtenemos el area afectada por el elemento, teniendo en cuenta su
+      // desplazamiento
+      int rInval = radio_elemento + MAX_VELOCIDAD;
+
+      // Forzamos a que se vuelva a dibujar el área máxima que se ha podido ver
+      // afectada por el movimiento que ha realizado el elemento gráfico
+      view.postInvalidate(x - rInval, y - rInval, x + rInval, y + rInval);
    }
 
 
