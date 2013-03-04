@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 
@@ -23,7 +24,7 @@ public class VistaJuego
    private Grafico nave;
 
    /**
-    * Incremento de dirección.
+    * Velocidad de giro de la nave.
     */
    private int giroNave;
 
@@ -75,6 +76,22 @@ public class VistaJuego
     * Cuando se realizó el último proceso.
     */
    private long ultimoProceso = 0;
+
+   /**
+    * Coordenada X del último evento táctil.
+    */
+   private float mX = 0;
+
+   /**
+    * Coordenada Y del último evento táctil.
+    */
+   private float mY = 0;
+
+   /**
+    * Flag que controla el estado táctil asociado al disparo (pulsación sin
+    * desplazamiento)
+    */
+   private boolean disparo = false;
 
 
    /**
@@ -185,6 +202,89 @@ public class VistaJuego
 
 
    /**
+    * Método que se llama cuando se interactúa con la pantalla táctil.
+    * 
+    * @param event
+    *        Evento que se ha genereado en la pantalla táctil
+    * @return
+    * @see android.view.View#onTouchEvent(android.view.MotionEvent)
+    */
+   @Override
+   public boolean onTouchEvent(MotionEvent event)
+   {
+      super.onTouchEvent(event);
+
+      // Recuperamos las coordenadas en las que se ha producido el evento
+      float x = event.getX();
+      float y = event.getY();
+
+      // TODO: Convertir los factores que adaptan la interacción con la pantalla
+      // táctil en preferencias de la aplicación
+
+      // Comprobamos la acción que se ha detectado
+      switch (event.getAction())
+      {
+         case MotionEvent.ACTION_DOWN:
+            // Si se ha iniciado una pulsación, por el momento consideramos un
+            // posible disparo
+            disparo = true;
+            break;
+
+         // Si se ha desplazado el dedo por la pantalla táctil hay que
+         // determinar si se ha hecho de forma vertical u horizontal
+         case MotionEvent.ACTION_MOVE:
+
+            // Vemos las diferencias entre las coordenadas almacenadas (las de
+            // la pulsación que inició el movimiento) y las actuales
+            float dx = Math.abs(x - mX);
+            float dy = Math.abs(y - mY);
+
+            // Si el movimiento se realiza en el eje X (horizontal)
+            if (dy < 6 && dx > 6)
+            {
+               // Modificamos la velocidad de giro de la nave en función del
+               // movimiento
+               giroNave = Math.round((x - mX) / 2);
+
+               // Si hay desplazamiento del dedo, no es disparo
+               disparo = false;
+            }
+            else if (dx < 6 && dy > 6) // Si el movimiento es vertical
+            {
+               // Modificamos la aceleración de la nave en función del
+               // movimiento
+               aceleracionNave = Math.round((mY - y) / 25);
+
+               // Si hay desplazamiento del dedo, no es disparo
+               disparo = false;
+            }
+            break;
+
+         // Cuando el dedo se levanta de la pantalla, dejamos de girar o
+         // acelerar la nave
+         case MotionEvent.ACTION_UP:
+            giroNave = 0;
+            aceleracionNave = 0;
+
+            // Si hemos detectado una pulsación sin desplazamiento
+            if (disparo)
+            {
+               // Disparamos
+               // ActivaMisil();
+            }
+            break;
+      }
+
+      // Guardamos las nuevas coordenadas
+      mX = x;
+      mY = y;
+
+      // Devolvemos true para que el evento deje de propagarse
+      return true;
+   }
+
+
+   /**
     * Actualiza la posición de todos los elementos del juego.
     * Calcula la velocidad y dirección de la nave a partir de la información
     * proporcionada por el jugador mediante los controles del juego.
@@ -243,7 +343,7 @@ public class VistaJuego
          {
             // Actualizamos la posición de los elementos del juego
             actualizaFisica();
-            
+
             // Dormimos el hilo hasta que toque actualizar de nuevo
             try
             {
