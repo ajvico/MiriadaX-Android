@@ -254,6 +254,10 @@ public class VistaJuego
                // Modificamos la aceleración de la nave en función del
                // movimiento
                aceleracionNave = Math.round((mY - y) / 25);
+               
+               // Para impedir que se decelere, la aceleración no puede ser negativa
+               // TODO: Añadir una preeferencia para activar/desactivar esto
+               if (aceleracionNave < 0) aceleracionNave = 0;
 
                // Si hay desplazamiento del dedo, no es disparo
                disparo = false;
