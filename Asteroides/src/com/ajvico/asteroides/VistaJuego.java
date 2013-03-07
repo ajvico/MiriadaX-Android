@@ -1,10 +1,15 @@
 package com.ajvico.asteroides;
 
+import java.util.List;
 import java.util.Vector;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,6 +20,7 @@ import android.view.View;
  */
 public class VistaJuego
    extends View
+   implements SensorEventListener
 {
    /* NAVE */
 
@@ -93,6 +99,16 @@ public class VistaJuego
     */
    private boolean disparo = false;
 
+   /**
+    * Flag que indica si he ha guardado ya una primera lectura del sensor.
+    */
+   private boolean hayValorInicial = false;
+
+   /**
+    * Valor obtenido del lector al crear la vista.
+    */
+   private float valorInicial;
+
 
    /**
     * Constructor de la vista.
@@ -136,6 +152,21 @@ public class VistaJuego
 
          // Añadimos el elemento gráfico al array de asteroides
          asteroides.add(asteroide);
+      }
+
+      // Registramos el sensor que queremos utilizar (orientación)
+      SensorManager mSensorManager =
+         (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+      List<Sensor> listSensors =
+         mSensorManager.getSensorList(Sensor.TYPE_ORIENTATION);
+
+      if (!listSensors.isEmpty())
+      {
+         Sensor orientationSensor = listSensors.get(0);
+         mSensorManager.registerListener(
+            this,
+            orientationSensor,
+            SensorManager.SENSOR_DELAY_GAME);
       }
    }
 
@@ -207,6 +238,8 @@ public class VistaJuego
     * @param event
     *        Evento que se ha genereado en la pantalla táctil
     * @return
+    *         True si el evento se ha gestionado aquí. False si debe seguir
+    *         propagándose.
     * @see android.view.View#onTouchEvent(android.view.MotionEvent)
     */
    @Override
@@ -254,8 +287,9 @@ public class VistaJuego
                // Modificamos la aceleración de la nave en función del
                // movimiento
                aceleracionNave = Math.round((mY - y) / 25);
-               
-               // Para impedir que se decelere, la aceleración no puede ser negativa
+
+               // Para impedir que se decelere, la aceleración no puede ser
+               // negativa
                // TODO: Añadir una preeferencia para activar/desactivar esto
                if (aceleracionNave < 0) aceleracionNave = 0;
 
@@ -285,6 +319,46 @@ public class VistaJuego
 
       // Devolvemos true para que el evento deje de propagarse
       return true;
+   }
+
+
+   /**
+    * Método que se ejecuta si cambia la precisión del sensor.
+    * 
+    * @see android.hardware.SensorEventListener#onAccuracyChanged(android.hardware.Sensor,
+    *      int)
+    */
+   @Override
+   public void onAccuracyChanged(Sensor sensor, int accuracy)
+   {
+   }
+
+
+   /**
+    * Método que se ejecuta cada vez que alguno de los sensores registrados
+    * produce algún eventos
+    * 
+    * @param event
+    *        Evento que ha producido el sensor. Incluye los nuevos valores
+    *        medidos.
+    * @see android.hardware.SensorEventListener#onSensorChanged(android.hardware.SensorEvent)
+    */
+   @Override
+   public void onSensorChanged(SensorEvent event)
+   {
+      // Recuperamos los valores medidos por el sensor
+      float valor = event.values[1];
+
+      // La primera vez guardamos el valor obtenido
+      if (!hayValorInicial)
+      {
+         valorInicial = valor;
+         hayValorInicial = true;
+      }
+
+      // Actualizamos el giro de la nave midiendo la diferencia entre el valor
+      // actual y el que se midió cuando se creó la vista.
+      giroNave = (int) (valorInicial - valor) / 3;
    }
 
 
@@ -360,4 +434,5 @@ public class VistaJuego
          }
       }
    } // class ThreadJuego
+
 } // class VistaJuego
