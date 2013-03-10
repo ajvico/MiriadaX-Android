@@ -238,6 +238,26 @@ class Grafico
 
 
    /**
+    * Fuerza a que se vuelva a dibujar el área que ocupa actualmente el elemento
+    * gráfico en la vista.
+    */
+   public void invalidar()
+   {
+      // Obtenemos las coordenadas actuales del centro del elemento
+      int x = (int) (posX + ancho / 2);
+      int y = (int) (posY + alto / 2);
+
+      // Forzamos a que se vuelva a dibujar el área que ocupa actualmente el
+      // elemento
+      view.postInvalidate(
+         x - radio_elemento,
+         y - radio_elemento,
+         x + radio_elemento,
+         y + radio_elemento);
+   }
+
+
+   /**
     * Método que permite obtener la distancia entre dos elementos gráficos (el
     * actual y el que se suministra como parámetro).
     * 

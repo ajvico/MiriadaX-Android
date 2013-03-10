@@ -474,18 +474,30 @@ public class VistaJuego
 
    private void ActivaMisil()
    {
+      // Nos aseguramos que de el misil anterior (si existiera) se borra
+      misil.invalidar();
+
+      // Calculamos la posición de la que tiene que partir el misil
       misil.setPosX(
          nave.getPosX() + nave.getAncho() / 2 - misil.getAncho() / 2);
       misil.setPosY(nave.getPosY() + nave.getAlto() / 2 - misil.getAlto() / 2);
+
+      // Calculamos el ángulo y la velocidad con la que debe salir el misil
       misil.setAngulo(nave.getAngulo());
       misil.setIncX(
          Math.cos(Math.toRadians(misil.getAngulo())) * PASO_VELOCIDAD_MISIL);
       misil.setIncY(
          Math.sin(Math.toRadians(misil.getAngulo())) * PASO_VELOCIDAD_MISIL);
+
+      // Fijamos el tiempo máximo que puede estar el misil en pantalla
+      // El objetivo es impedir que cruce la pantalla e impacte en la propia
+      // nave
       tiempoMisil =
          (int) Math.min(
             this.getWidth() / Math.abs(misil.getIncX()),
             this.getHeight() / Math.abs(misil.getIncY())) - 2;
+
+      // Marcamos el misil como activo para que se muestre
       misilActivo = true;
    }
 
