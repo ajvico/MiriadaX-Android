@@ -66,22 +66,29 @@ public class VistaJuego
     */
    private int numFragmentos = 3;
 
-   /* THREAD Y TIEMPO */
+   /* MISIL */
 
    /**
-    * Thread encargado de procesar el juego.
+    * Gráfico del misil.
     */
-   private ThreadJuego thread = new ThreadJuego();
+   private Grafico misil;
 
    /**
-    * Cada cuanto queremos procesar cambios (ms).
+    * Incremento de la velocidad del misil.
     */
-   private static int PERIODO_PROCESO = 40;
+   private static int PASO_VELOCIDAD_MISIL = 12;
 
    /**
-    * Cuando se realizó el último proceso.
+    * Determina si tenemos un misil en pantalla o no.
     */
-   private long ultimoProceso = 0;
+   private boolean misilActivo = false;
+
+   /**
+    * Tiempo que permanece como máximo un misil en pantalla.
+    */
+   private int tiempoMisil;
+
+   /* CONTROL DEL JUEGO */
 
    /**
     * Coordenada X del último evento táctil.
@@ -109,6 +116,23 @@ public class VistaJuego
     */
    private float valorInicial;
 
+   /* THREAD Y TIEMPO */
+
+   /**
+    * Thread encargado de procesar el juego.
+    */
+   private ThreadJuego thread = new ThreadJuego();
+
+   /**
+    * Cada cuanto queremos procesar cambios (ms).
+    */
+   private static int PERIODO_PROCESO = 40;
+
+   /**
+    * Cuando se realizó el último proceso.
+    */
+   private long ultimoProceso = 0;
+
 
    /**
     * Constructor de la vista.
@@ -130,11 +154,15 @@ public class VistaJuego
       // los recursos definidos
       Drawable drawableNave, drawableAsteroide, drawableMisil;
       drawableNave = context.getResources().getDrawable(R.drawable.nave);
+      drawableMisil = context.getResources().getDrawable(R.drawable.misil1);
       drawableAsteroide =
          context.getResources().getDrawable(R.drawable.asteroide1);
 
       // Creamos el elemento gráfico para la nave.
       nave = new Grafico(this, drawableNave);
+
+      // Creamos el elemento gráfico para el misil
+      misil = new Grafico(this, drawableMisil);
 
       // Creamos un array para albergar los elementos gráficos de los asteroides
       asteroides = new Vector<Grafico>();
@@ -224,6 +252,10 @@ public class VistaJuego
       // Mostramos la nave
       nave.dibujaGrafico(canvas);
 
+      // Si tenemos un misil activo, lo mostramos
+      if (misilActivo)
+         misil.dibujaGrafico(canvas);
+
       // Mostramos los asteroides
       for (Grafico asteroide : asteroides)
       {
@@ -308,7 +340,7 @@ public class VistaJuego
             if (disparo)
             {
                // Disparamos
-               // ActivaMisil();
+               ActivaMisil();
             }
             break;
       }
@@ -404,6 +436,57 @@ public class VistaJuego
       {
          asteroide.incrementaPos(retardo);
       }
+
+      // Si tenemos un misil activo, actualizamos su posición
+      if (misilActivo)
+      {
+         misil.incrementaPos(retardo);
+
+         // Controlamos el tiempo que pasa activo el misil
+         tiempoMisil -= retardo;
+         if (tiempoMisil < 0)
+         {
+            // Si se agota el tiempo, el misil deja de estar activo
+            misilActivo = false;
+         }
+         else
+         {
+            // Si el misil sigue activo, miramos si ha chocado con algún
+            // asteroide
+            for (int i = 0; i < asteroides.size(); i++)
+               if (misil.verificaColision(asteroides.elementAt(i)))
+               {
+                  // Si el misil choca, destruimos el asteroide
+                  destruyeAsteroide(i);
+                  break;
+               }
+         }
+      }
+   }
+
+
+   private void destruyeAsteroide(int i)
+   {
+      asteroides.remove(i);
+      misilActivo = false;
+   }
+
+
+   private void ActivaMisil()
+   {
+      misil.setPosX(
+         nave.getPosX() + nave.getAncho() / 2 - misil.getAncho() / 2);
+      misil.setPosY(nave.getPosY() + nave.getAlto() / 2 - misil.getAlto() / 2);
+      misil.setAngulo(nave.getAngulo());
+      misil.setIncX(
+         Math.cos(Math.toRadians(misil.getAngulo())) * PASO_VELOCIDAD_MISIL);
+      misil.setIncY(
+         Math.sin(Math.toRadians(misil.getAngulo())) * PASO_VELOCIDAD_MISIL);
+      tiempoMisil =
+         (int) Math.min(
+            this.getWidth() / Math.abs(misil.getIncX()),
+            this.getHeight() / Math.abs(misil.getIncY())) - 2;
+      misilActivo = true;
    }
 
 
