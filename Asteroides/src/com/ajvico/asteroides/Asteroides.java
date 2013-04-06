@@ -2,6 +2,7 @@ package com.ajvico.asteroides;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -9,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.Toast;
 
 
 /**
@@ -30,6 +30,10 @@ public class Asteroides
     */
    private Button bAcercaDe;
 
+   /**
+    * Reproductor de audio.
+    */
+   private MediaPlayer mp;
 
    /**
     * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -41,6 +45,10 @@ public class Asteroides
       setContentView(R.layout.main);
 
       //Toast.makeText(this, "onCreate", Toast.LENGTH_SHORT).show();
+      
+      // Iniciamos la reproducción de la música
+      mp = MediaPlayer.create(this, R.raw.audio);
+      mp.start();
 
       // Se añade un escuchador para el evento onClick del botón
       // "Sobre el juego"
@@ -99,6 +107,9 @@ public class Asteroides
    @Override
    protected void onResume()
    {
+      // Reanudamos la música
+      mp.start();
+      
       super.onResume();
       //Toast.makeText(this, "onResume", Toast.LENGTH_SHORT).show();
    }
@@ -115,6 +126,9 @@ public class Asteroides
    @Override
    protected void onStop()
    {
+      // Paramos la música
+      mp.pause();
+      
       //Toast.makeText(this, "onStop", Toast.LENGTH_SHORT).show();
       super.onStop();
    }
