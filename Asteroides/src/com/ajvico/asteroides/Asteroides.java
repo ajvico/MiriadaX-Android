@@ -40,7 +40,7 @@ public class Asteroides
       super.onCreate(savedInstanceState);
       setContentView(R.layout.main);
 
-      Toast.makeText(this, "onCreate", Toast.LENGTH_SHORT).show();
+      //Toast.makeText(this, "onCreate", Toast.LENGTH_SHORT).show();
 
       // Se añade un escuchador para el evento onClick del botón
       // "Sobre el juego"
@@ -92,7 +92,7 @@ public class Asteroides
    protected void onStart()
    {
       super.onStart();
-      Toast.makeText(this, "onStart", Toast.LENGTH_SHORT).show();
+      //Toast.makeText(this, "onStart", Toast.LENGTH_SHORT).show();
    }
 
 
@@ -100,14 +100,14 @@ public class Asteroides
    protected void onResume()
    {
       super.onResume();
-      Toast.makeText(this, "onResume", Toast.LENGTH_SHORT).show();
+      //Toast.makeText(this, "onResume", Toast.LENGTH_SHORT).show();
    }
 
 
    @Override
    protected void onPause()
    {
-      Toast.makeText(this, "onPause", Toast.LENGTH_SHORT).show();
+      //Toast.makeText(this, "onPause", Toast.LENGTH_SHORT).show();
       super.onPause();
    }
 
@@ -115,7 +115,7 @@ public class Asteroides
    @Override
    protected void onStop()
    {
-      Toast.makeText(this, "onStop", Toast.LENGTH_SHORT).show();
+      //Toast.makeText(this, "onStop", Toast.LENGTH_SHORT).show();
       super.onStop();
    }
 
@@ -124,14 +124,14 @@ public class Asteroides
    protected void onRestart()
    {
       super.onRestart();
-      Toast.makeText(this, "onRestart", Toast.LENGTH_SHORT).show();
+      //Toast.makeText(this, "onRestart", Toast.LENGTH_SHORT).show();
    }
 
 
    @Override
    protected void onDestroy()
    {
-      Toast.makeText(this, "onDestroy", Toast.LENGTH_SHORT).show();
+      //Toast.makeText(this, "onDestroy", Toast.LENGTH_SHORT).show();
       super.onDestroy();
    }
 

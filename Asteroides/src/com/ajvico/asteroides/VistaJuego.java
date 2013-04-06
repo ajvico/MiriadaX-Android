@@ -509,13 +509,73 @@ public class VistaJuego
    class ThreadJuego
       extends Thread
    {
+
+      /**
+       * Flag que controla la pausa del hilo.
+       */
+      private boolean pausa;
+
+      /**
+       * Flag que controla la detención del hilo.
+       */
+      private boolean corriendo;
+
+
+      /**
+       * Permite pausar temporalmente el hilo.
+       */
+      public synchronized void pausar()
+      {
+         pausa = true;
+      }
+
+
+      /**
+       * Permite reanudar la ejecución del hilo si está pausada.
+       */
+      public synchronized void reanudar()
+      {
+         pausa = false;
+         ultimoProceso = System.currentTimeMillis();
+         notify();
+      }
+
+
+      /**
+       * Permite detener por completo la ejecución del hilo.
+       */
+      public void detener()
+      {
+         corriendo = false;
+         if (pausa) reanudar();
+      }
+
+
       @Override
       public void run()
       {
-         while (true)
+         // Sólo mantenemos la ejecución del hilo mientras no lo paren
+         // externamente
+         corriendo = true;
+         while (corriendo)
          {
             // Actualizamos la posición de los elementos del juego
             actualizaFisica();
+
+            // Pausamos el hilo si nos lo piden desde fuera
+            synchronized (this)
+            {
+               while (pausa)
+               {
+                  try
+                  {
+                     wait();
+                  }
+                  catch (Exception e)
+                  {
+                  }
+               }
+            }
 
             // Dormimos el hilo hasta que toque actualizar de nuevo
             try
@@ -529,5 +589,16 @@ public class VistaJuego
          }
       }
    } // class ThreadJuego
+
+
+   /**
+    * Permite obtener el hilo de ejecución que actualiza la vista del juego.
+    * 
+    * @return El hilo de ejecución
+    */
+   public ThreadJuego getThread()
+   {
+      return thread;
+   }
 
 } // class VistaJuego
