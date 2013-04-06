@@ -47,7 +47,7 @@ public class Asteroides
 
       // Toast.makeText(this, "onCreate", Toast.LENGTH_SHORT).show();
 
-      // Iniciamos la reproducción de la música
+      // Creamos el reproductor
       mp = MediaPlayer.create(this, R.raw.audio);
 
       // Si tenemos una posición guardada, la utilizamos
@@ -56,8 +56,6 @@ public class Asteroides
          int pos = estadoGuardado.getInt("posicion");
          mp.seekTo(pos);
       }
-
-      mp.start();
 
       // Se añade un escuchador para el evento onClick del botón
       // "Sobre el juego"
@@ -116,7 +114,7 @@ public class Asteroides
    @Override
    protected void onResume()
    {
-      // Reanudamos la música
+      // Iniciamos o reanudamos la música
       mp.start();
 
       super.onResume();
