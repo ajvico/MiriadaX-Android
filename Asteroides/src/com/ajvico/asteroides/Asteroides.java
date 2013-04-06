@@ -35,19 +35,28 @@ public class Asteroides
     */
    private MediaPlayer mp;
 
+
    /**
     * @see android.app.Activity#onCreate(android.os.Bundle)
     */
    @Override
-   protected void onCreate(Bundle savedInstanceState)
+   protected void onCreate(Bundle estadoGuardado)
    {
-      super.onCreate(savedInstanceState);
+      super.onCreate(estadoGuardado);
       setContentView(R.layout.main);
 
-      //Toast.makeText(this, "onCreate", Toast.LENGTH_SHORT).show();
-      
+      // Toast.makeText(this, "onCreate", Toast.LENGTH_SHORT).show();
+
       // Iniciamos la reproducción de la música
       mp = MediaPlayer.create(this, R.raw.audio);
+
+      // Si tenemos una posición guardada, la utilizamos
+      if (estadoGuardado != null && mp != null)
+      {
+         int pos = estadoGuardado.getInt("posicion");
+         mp.seekTo(pos);
+      }
+
       mp.start();
 
       // Se añade un escuchador para el evento onClick del botón
@@ -100,7 +109,7 @@ public class Asteroides
    protected void onStart()
    {
       super.onStart();
-      //Toast.makeText(this, "onStart", Toast.LENGTH_SHORT).show();
+      // Toast.makeText(this, "onStart", Toast.LENGTH_SHORT).show();
    }
 
 
@@ -109,16 +118,16 @@ public class Asteroides
    {
       // Reanudamos la música
       mp.start();
-      
+
       super.onResume();
-      //Toast.makeText(this, "onResume", Toast.LENGTH_SHORT).show();
+      // Toast.makeText(this, "onResume", Toast.LENGTH_SHORT).show();
    }
 
 
    @Override
    protected void onPause()
    {
-      //Toast.makeText(this, "onPause", Toast.LENGTH_SHORT).show();
+      // Toast.makeText(this, "onPause", Toast.LENGTH_SHORT).show();
       super.onPause();
    }
 
@@ -128,9 +137,21 @@ public class Asteroides
    {
       // Paramos la música
       mp.pause();
-      
-      //Toast.makeText(this, "onStop", Toast.LENGTH_SHORT).show();
+
+      // Toast.makeText(this, "onStop", Toast.LENGTH_SHORT).show();
       super.onStop();
+   }
+
+
+   @Override
+   protected void onSaveInstanceState(Bundle estadoGuardado)
+   {
+      super.onSaveInstanceState(estadoGuardado);
+      if (mp != null)
+      {
+         int pos = mp.getCurrentPosition();
+         estadoGuardado.putInt("posicion", pos);
+      }
    }
 
 
@@ -138,14 +159,14 @@ public class Asteroides
    protected void onRestart()
    {
       super.onRestart();
-      //Toast.makeText(this, "onRestart", Toast.LENGTH_SHORT).show();
+      // Toast.makeText(this, "onRestart", Toast.LENGTH_SHORT).show();
    }
 
 
    @Override
    protected void onDestroy()
    {
-      //Toast.makeText(this, "onDestroy", Toast.LENGTH_SHORT).show();
+      // Toast.makeText(this, "onDestroy", Toast.LENGTH_SHORT).show();
       super.onDestroy();
    }
 
