@@ -26,6 +26,7 @@ public class Juego
    protected void onPause()
    {
       super.onPause();
+      vistaJuego.desregistrarSensores();
       vistaJuego.getThread().pausar();
    }
 
@@ -34,6 +35,7 @@ public class Juego
    protected void onResume()
    {
       super.onResume();
+      vistaJuego.registrarSensores();
       vistaJuego.getThread().reanudar();
    }
 

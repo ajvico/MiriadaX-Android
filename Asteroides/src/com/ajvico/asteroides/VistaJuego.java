@@ -133,6 +133,17 @@ public class VistaJuego
     */
    private long ultimoProceso = 0;
 
+   /**
+    * Gestor de sensores. Se usa para los controles del juego.
+    */
+   private SensorManager mSensorManager;
+
+   /**
+    * Lista de sensores de orientación disponibles. La guardamos para no tener
+    * que obtenerla cada vez.
+    */
+   private List<Sensor> listSensors;
+
 
    /**
     * Constructor de la vista.
@@ -182,20 +193,10 @@ public class VistaJuego
          asteroides.add(asteroide);
       }
 
-      // Registramos el sensor que queremos utilizar (orientación)
-      SensorManager mSensorManager =
+      // Obtenemos el gestor de sensores y los sensores de orientación disponibles
+      mSensorManager =
          (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-      List<Sensor> listSensors =
-         mSensorManager.getSensorList(Sensor.TYPE_ORIENTATION);
-
-      if (!listSensors.isEmpty())
-      {
-         Sensor orientationSensor = listSensors.get(0);
-         mSensorManager.registerListener(
-            this,
-            orientationSensor,
-            SensorManager.SENSOR_DELAY_GAME);
-      }
+      listSensors = mSensorManager.getSensorList(Sensor.TYPE_ORIENTATION);
    }
 
 
@@ -391,6 +392,32 @@ public class VistaJuego
       // Actualizamos el giro de la nave midiendo la diferencia entre el valor
       // actual y el que se midió cuando se creó la vista.
       giroNave = (int) (valorInicial - valor) / 3;
+   }
+
+
+   /**
+    * Registra los sensores que se utilizan para controlar la nave.
+    */
+   public void registrarSensores()
+   {
+      if (!listSensors.isEmpty())
+      {
+         Sensor orientationSensor = listSensors.get(0);
+         mSensorManager.registerListener(
+            this,
+            orientationSensor,
+            SensorManager.SENSOR_DELAY_GAME);
+      }
+   }
+
+
+   /**
+    * Desregistra los seonsores que se utilizan para controlar de nave.
+    * De esta forma dejan de hacerse mediciones.
+    */
+   public void desregistrarSensores()
+   {
+      mSensorManager.unregisterListener(this);
    }
 
 
