@@ -33,7 +33,7 @@ public class Asteroides
    /**
     * Reproductor de audio.
     */
-   private MediaPlayer mp;
+   //private MediaPlayer mp;
 
 
    /**
@@ -47,15 +47,18 @@ public class Asteroides
 
       // Toast.makeText(this, "onCreate", Toast.LENGTH_SHORT).show();
 
+      // Iniciamos el servicio que reproduce la música
+      startService(new Intent(Asteroides.this, ServicioMusica.class));
+
       // Creamos el reproductor
-      mp = MediaPlayer.create(this, R.raw.audio);
+      // mp = MediaPlayer.create(this, R.raw.audio);
 
       // Si tenemos una posición guardada, la utilizamos
-      if (estadoGuardado != null && mp != null)
-      {
-         int pos = estadoGuardado.getInt("posicion");
-         mp.seekTo(pos);
-      }
+      // if (estadoGuardado != null && mp != null)
+      // {
+      // int pos = estadoGuardado.getInt("posicion");
+      // mp.seekTo(pos);
+      // }
 
       // Se añade un escuchador para el evento onClick del botón
       // "Sobre el juego"
@@ -115,7 +118,7 @@ public class Asteroides
    protected void onResume()
    {
       // Iniciamos o reanudamos la música
-      mp.start();
+      //mp.start();
 
       super.onResume();
       // Toast.makeText(this, "onResume", Toast.LENGTH_SHORT).show();
@@ -134,7 +137,7 @@ public class Asteroides
    protected void onStop()
    {
       // Paramos la música
-      mp.pause();
+      //mp.pause();
 
       // Toast.makeText(this, "onStop", Toast.LENGTH_SHORT).show();
       super.onStop();
@@ -145,11 +148,11 @@ public class Asteroides
    protected void onSaveInstanceState(Bundle estadoGuardado)
    {
       super.onSaveInstanceState(estadoGuardado);
-      if (mp != null)
-      {
-         int pos = mp.getCurrentPosition();
-         estadoGuardado.putInt("posicion", pos);
-      }
+      //if (mp != null)
+      //{
+      //   int pos = mp.getCurrentPosition();
+      //   estadoGuardado.putInt("posicion", pos);
+      //}
    }
 
 
@@ -165,6 +168,10 @@ public class Asteroides
    protected void onDestroy()
    {
       // Toast.makeText(this, "onDestroy", Toast.LENGTH_SHORT).show();
+      
+      // Paramos el servicio que reproduce la música
+      stopService(new Intent(Asteroides.this, ServicioMusica.class));
+      
       super.onDestroy();
    }
 
