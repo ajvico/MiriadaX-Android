@@ -5,7 +5,7 @@
    <CheckBoxPreference
       android:key="musica"
       android:summary="@string/prefMusicaResumen"
-      android:title="@string/prefMusicaTitulo" />
+      android:title="@string/prefMusicaTitulo" android:enabled="true"/>
 
    <ListPreference
       android:defaultValue="1"

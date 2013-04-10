@@ -2,6 +2,7 @@ package com.ajvico.asteroides;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.Menu;
@@ -34,7 +35,7 @@ public class Asteroides
    /**
     * Reproductor de audio.
     */
-   // private MediaPlayer mp;
+   private MediaPlayer mp;
 
    /**
     * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -48,17 +49,17 @@ public class Asteroides
       // Toast.makeText(this, "onCreate", Toast.LENGTH_SHORT).show();
 
       // Iniciamos el servicio que reproduce la música
-      startService(new Intent(Asteroides.this, ServicioMusica.class));
+      // startService(new Intent(Asteroides.this, ServicioMusica.class));
 
       // Creamos el reproductor
-      // mp = MediaPlayer.create(this, R.raw.audio);
+      mp = MediaPlayer.create(this, R.raw.audio);
 
       // Si tenemos una posición guardada, la utilizamos
-      // if (estadoGuardado != null && mp != null)
-      // {
-      // int pos = estadoGuardado.getInt("posicion");
-      // mp.seekTo(pos);
-      // }
+      if (estadoGuardado != null && mp != null)
+      {
+         int pos = estadoGuardado.getInt("posicion");
+         mp.seekTo(pos);
+      }
 
       // Creamos un almacén para las puntuaciones
       // almacen = new AlmacenPuntuacionesArray();
@@ -122,7 +123,13 @@ public class Asteroides
    protected void onResume()
    {
       // Iniciamos o reanudamos la música
-      // mp.start();
+      // Pero sólo si la opción está activa
+      SharedPreferences pref =
+         getSharedPreferences("com.ajvico.asteroides_preferences", MODE_PRIVATE);
+      if (pref.getBoolean("musica", false))
+      {
+         mp.start();
+      }
 
       super.onResume();
       // Toast.makeText(this, "onResume", Toast.LENGTH_SHORT).show();
@@ -141,7 +148,7 @@ public class Asteroides
    protected void onStop()
    {
       // Paramos la música
-      // mp.pause();
+      mp.pause();
 
       // Toast.makeText(this, "onStop", Toast.LENGTH_SHORT).show();
       super.onStop();
@@ -152,11 +159,11 @@ public class Asteroides
    protected void onSaveInstanceState(Bundle estadoGuardado)
    {
       super.onSaveInstanceState(estadoGuardado);
-      // if (mp != null)
-      // {
-      // int pos = mp.getCurrentPosition();
-      // estadoGuardado.putInt("posicion", pos);
-      // }
+      if (mp != null)
+      {
+         int pos = mp.getCurrentPosition();
+         estadoGuardado.putInt("posicion", pos);
+      }
    }
 
 
@@ -174,7 +181,7 @@ public class Asteroides
       // Toast.makeText(this, "onDestroy", Toast.LENGTH_SHORT).show();
 
       // Paramos el servicio que reproduce la música
-      stopService(new Intent(Asteroides.this, ServicioMusica.class));
+      //stopService(new Intent(Asteroides.this, ServicioMusica.class));
 
       super.onDestroy();
    }
