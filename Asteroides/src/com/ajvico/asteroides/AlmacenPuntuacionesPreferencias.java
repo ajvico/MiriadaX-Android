@@ -57,8 +57,18 @@ public class AlmacenPuntuacionesPreferencias
       // Obtenemos el editor del archivo de preferencias
       SharedPreferences.Editor editor = preferencias.edit();
 
-      // Almacenamos la puntuación, sobrescribiendo a la que hubiera
-      editor.putString("puntuacion", puntos + " " + nombre);
+      // Desplazamos las puntuaciones almacenadas, descartando la más antigua
+      for (int n = 9; n >= 1; n--)
+      {
+         editor.putString(
+            "puntuacion" + n,
+            preferencias.getString("puntuacion" + (n - 1), ""));
+      }
+
+      // Almacenamos la nueva puntuación, como la primera de la lista
+      editor.putString("puntuacion0", puntos + " " + nombre);
+
+      // Guardamos los cambios
       editor.commit();
    }
 
@@ -67,10 +77,10 @@ public class AlmacenPuntuacionesPreferencias
     * Devuelve la última puntuación almacenada.
     * 
     * @param cantidad
-    *        Cantidad de puntuaciones que queremos obtener. Aquí se ignora.
+    *        Cantidad de puntuaciones que queremos obtener
     * @return
-    *         Lista con las puntuaciones solicitadas. Se devuelve una única
-    *         puntuación como cadena de texto. Los puntos seguidos del nombre
+    *         Lista con las puntuaciones solicitadas. Se devuelven como cadena
+    *         de texto. Los puntos seguidos del nombre
     *         del jugador.
     * @see com.ajvico.asteroides.IAlmacenPuntuaciones#listaPuntuaciones(int)
     */
@@ -79,19 +89,22 @@ public class AlmacenPuntuacionesPreferencias
       // Obtenemos las preferencias asociadas al contexto
       SharedPreferences preferencias =
          context.getSharedPreferences(PREFERENCIAS, Context.MODE_PRIVATE);
+      
+      // No podemos devolver más de 10 puntuaciones
+      int num = (cantidad > 10 || cantidad < 0) ? 10 : cantidad;
 
-      // Extraemos la puntuación de las preferencias (sólo se almacena una
-      // puntuación)
-      String s = preferencias.getString("puntuacion", "");
-
-      // Si tenemos puntuación, la añadimos a la lista
+      // Extraemos las puntuaciones de las preferencias
       Vector<String> result = new Vector<String>();
-      if (s != "")
+      for (int n = 0; n <= (num - 1); n++)
       {
-         result.add(s);
+         String s = preferencias.getString("puntuacion" + n, "");
+         if (s != "")
+         {
+            result.add(s);
+         }
       }
 
-      // Devolvemos la puntuación en forma de lista
+      // Devolvemos las puntuaciones
       return result;
    }
 }
