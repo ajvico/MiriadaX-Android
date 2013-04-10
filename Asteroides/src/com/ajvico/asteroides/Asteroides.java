@@ -22,7 +22,7 @@ public class Asteroides
    /**
     * Variable de clase para guardar la lista de puntuaciones.
     */
-   public static IAlmacenPuntuaciones almacen = new AlmacenPuntuacionesArray();
+   public static IAlmacenPuntuaciones almacen = null;
 
    /**
     * Referencia para el botón "Sobre el juego".
@@ -59,6 +59,10 @@ public class Asteroides
       // int pos = estadoGuardado.getInt("posicion");
       // mp.seekTo(pos);
       // }
+
+      // Creamos un almacén para las puntuaciones
+      // almacen = new AlmacenPuntuacionesArray();
+      almacen = new AlmacenPuntuacionesPreferencias(this);
 
       // Se añade un escuchador para el evento onClick del botón
       // "Sobre el juego"
@@ -312,14 +316,17 @@ public class Asteroides
          int puntuacion = data.getExtras().getInt("puntuacion");
 
          // Mejor leerlo desde un Dialog o una nueva actividad
-         // //AlertDialog.Builder
+         // AlertDialog.Builder
          String nombre = "Yo";
 
          // Guardamos la puntuación obtenida en el almazacén de puntuaciones
-         almacen.guardarPuntuacion(
-            puntuacion,
-            nombre,
-            System.currentTimeMillis());
+         if (almacen != null)
+         {
+            almacen.guardarPuntuacion(
+               puntuacion,
+               nombre,
+               System.currentTimeMillis());
+         }
 
          // Mostramos la lista de puntuaciones actual
          lanzarPuntuaciones(null);
