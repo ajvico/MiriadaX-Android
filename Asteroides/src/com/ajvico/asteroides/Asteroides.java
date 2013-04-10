@@ -31,11 +31,11 @@ public class Asteroides
     */
    private Button bAcercaDe;
 
-
    /**
     * Reproductor de audio.
     */
    private MediaPlayer mp;
+
 
    /**
     * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -63,7 +63,8 @@ public class Asteroides
 
       // Creamos un almacén para las puntuaciones
       // almacen = new AlmacenPuntuacionesArray();
-      almacen = new AlmacenPuntuacionesPreferencias(this);
+      // almacen = new AlmacenPuntuacionesPreferencias(this);
+      almacen = new AlmacenPuntuacionesFicheroInterno(this);
 
       // Se añade un escuchador para el evento onClick del botón
       // "Sobre el juego"
@@ -181,7 +182,7 @@ public class Asteroides
       // Toast.makeText(this, "onDestroy", Toast.LENGTH_SHORT).show();
 
       // Paramos el servicio que reproduce la música
-      //stopService(new Intent(Asteroides.this, ServicioMusica.class));
+      // stopService(new Intent(Asteroides.this, ServicioMusica.class));
 
       super.onDestroy();
    }
