@@ -26,7 +26,7 @@ public class ServicioMusica
    @Override
    public void onCreate()
    {
-      Toast.makeText(this, "Servicio creado", Toast.LENGTH_SHORT).show();
+      //Toast.makeText(this, "Servicio creado", Toast.LENGTH_SHORT).show();
       nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
       reproductor = MediaPlayer.create(this, R.raw.audio);
    }
@@ -35,10 +35,10 @@ public class ServicioMusica
    @Override
    public int onStartCommand(Intent intenc, int flags, int idArranque)
    {
-      Toast.makeText(
-         this,
-         "Servicio arrancado " + idArranque,
-         Toast.LENGTH_SHORT).show();
+//      Toast.makeText(
+//         this,
+//         "Servicio arrancado " + idArranque,
+//         Toast.LENGTH_SHORT).show();
       reproductor.start();
 
       // Creamos una notificación, indicando icono, texto y cuándo se mostrará
@@ -75,7 +75,7 @@ public class ServicioMusica
    @Override
    public void onDestroy()
    {
-      Toast.makeText(this, "Servicio detenido", Toast.LENGTH_SHORT).show();
+      //Toast.makeText(this, "Servicio detenido", Toast.LENGTH_SHORT).show();
       reproductor.stop();
       
       // Al parar el servicio se elimina la notificación

@@ -19,6 +19,7 @@ public class Juego
       super.onCreate(savedInstanceState);
       setContentView(R.layout.juego);
       vistaJuego = (VistaJuego) findViewById(R.id.VistaJuego);
+      vistaJuego.setPadre(this);
    }
 
 

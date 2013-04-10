@@ -3,13 +3,16 @@ package com.ajvico.asteroides;
 import java.util.List;
 import java.util.Vector;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -116,6 +119,11 @@ public class VistaJuego
     */
    private float valorInicial;
 
+   /**
+    * Puntuación del jugador.
+    */
+   private int puntuacion = 0;
+
    /* THREAD Y TIEMPO */
 
    /**
@@ -133,6 +141,8 @@ public class VistaJuego
     */
    private long ultimoProceso = 0;
 
+   /* SENSORES */
+
    /**
     * Gestor de sensores. Se usa para los controles del juego.
     */
@@ -143,6 +153,13 @@ public class VistaJuego
     * que obtenerla cada vez.
     */
    private List<Sensor> listSensors;
+
+   /* VARIOS */
+
+   /**
+    * Actividad que aloja esta vista.
+    */
+   private Activity padre;
 
 
    /**
@@ -193,7 +210,8 @@ public class VistaJuego
          asteroides.add(asteroide);
       }
 
-      // Obtenemos el gestor de sensores y los sensores de orientación disponibles
+      // Obtenemos el gestor de sensores y los sensores de orientación
+      // disponibles
       mSensorManager =
          (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
       listSensors = mSensorManager.getSensorList(Sensor.TYPE_ORIENTATION);
@@ -489,13 +507,41 @@ public class VistaJuego
                }
          }
       }
+
+      // Comprobamos si algún asteroide ha chocado con la nave
+      for (Grafico asteroide : asteroides)
+      {
+         if (asteroide.verificaColision(nave))
+         {
+            salir();
+         }
+      }
    }
 
 
+   /**
+    * Destruye uno de los asteroides (por haber sido alcanzado por un misil).
+    * 
+    * @param i
+    *        Número del asteroide que hay que destruir.
+    */
    private void destruyeAsteroide(int i)
    {
+      // Eliminamos el asteroide de la lista de asteroides
       asteroides.remove(i);
+
+      // Hacemos desaparecer el misil
       misilActivo = false;
+
+      // Sumamos los puntos correspondientes a la destrucción del asteroide
+      puntuacion += 1000;
+
+      // Si ya no nos quedan más asteroides
+      if (asteroides.isEmpty())
+      {
+         // Finalizamos el juego
+         salir();
+      }
    }
 
 
@@ -526,6 +572,21 @@ public class VistaJuego
 
       // Marcamos el misil como activo para que se muestre
       misilActivo = true;
+   }
+
+
+   /**
+    * Finaliza la actividad que contiene a esta vista y devuelve la puntuación
+    * acumulada.
+    */
+   private void salir()
+   {
+      Bundle bundle = new Bundle();
+      bundle.putInt("puntuacion", puntuacion);
+      Intent intent = new Intent();
+      intent.putExtras(bundle);
+      padre.setResult(Activity.RESULT_OK, intent);
+      padre.finish();
    }
 
 
@@ -626,6 +687,18 @@ public class VistaJuego
    public ThreadJuego getThread()
    {
       return thread;
+   }
+
+
+   /**
+    * Permite almacenar en la vista la actividad que la contiene.
+    * 
+    * @param padre
+    *        La actividad que aloja esta vista.
+    */
+   public void setPadre(Activity padre)
+   {
+      this.padre = padre;
    }
 
 } // class VistaJuego

@@ -30,11 +30,11 @@ public class Asteroides
     */
    private Button bAcercaDe;
 
+
    /**
     * Reproductor de audio.
     */
-   //private MediaPlayer mp;
-
+   // private MediaPlayer mp;
 
    /**
     * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -118,7 +118,7 @@ public class Asteroides
    protected void onResume()
    {
       // Iniciamos o reanudamos la música
-      //mp.start();
+      // mp.start();
 
       super.onResume();
       // Toast.makeText(this, "onResume", Toast.LENGTH_SHORT).show();
@@ -137,7 +137,7 @@ public class Asteroides
    protected void onStop()
    {
       // Paramos la música
-      //mp.pause();
+      // mp.pause();
 
       // Toast.makeText(this, "onStop", Toast.LENGTH_SHORT).show();
       super.onStop();
@@ -148,11 +148,11 @@ public class Asteroides
    protected void onSaveInstanceState(Bundle estadoGuardado)
    {
       super.onSaveInstanceState(estadoGuardado);
-      //if (mp != null)
-      //{
-      //   int pos = mp.getCurrentPosition();
-      //   estadoGuardado.putInt("posicion", pos);
-      //}
+      // if (mp != null)
+      // {
+      // int pos = mp.getCurrentPosition();
+      // estadoGuardado.putInt("posicion", pos);
+      // }
    }
 
 
@@ -168,10 +168,10 @@ public class Asteroides
    protected void onDestroy()
    {
       // Toast.makeText(this, "onDestroy", Toast.LENGTH_SHORT).show();
-      
+
       // Paramos el servicio que reproduce la música
       stopService(new Intent(Asteroides.this, ServicioMusica.class));
-      
+
       super.onDestroy();
    }
 
@@ -185,7 +185,8 @@ public class Asteroides
    public void lanzarJuego(View view)
    {
       Intent i = new Intent(this, Juego.class);
-      startActivity(i);
+      // startActivity(i);
+      startActivityForResult(i, 1234);
    }
 
 
@@ -281,5 +282,47 @@ public class Asteroides
             break;
       }
       return true; // true -> consumimos el item, no se propaga
+   }
+
+
+   /**
+    * Método que se ejecuta cuando una actividad lanzada desde esta devuelve un
+    * valor.
+    * 
+    * @param requestCode
+    *        Identificador enviado al crear el intent que lanzó la actividad que
+    *        está respondiendo.
+    * @param resultCode
+    *        Código de resultado devuelto por la actividad.
+    * @param data
+    *        Datos adicionales devueltos por la actividad.
+    * @see android.app.Activity#onActivityResult(int, int,
+    *      android.content.Intent)
+    */
+   @Override
+   protected void onActivityResult(int requestCode, int resultCode, Intent data)
+   {
+      super.onActivityResult(requestCode, resultCode, data);
+
+      // Comprobamos que la respuesta es de la actividad que lanzamos, que ha
+      // finalizado correctamente y que ha devuelto datos
+      if (requestCode == 1234 & resultCode == RESULT_OK & data != null)
+      {
+         // Recuperamos la puntuación obtenida por el jugador
+         int puntuacion = data.getExtras().getInt("puntuacion");
+
+         // Mejor leerlo desde un Dialog o una nueva actividad
+         // //AlertDialog.Builder
+         String nombre = "Yo";
+
+         // Guardamos la puntuación obtenida en el almazacén de puntuaciones
+         almacen.guardarPuntuacion(
+            puntuacion,
+            nombre,
+            System.currentTimeMillis());
+
+         // Mostramos la lista de puntuaciones actual
+         lanzarPuntuaciones(null);
+      }
    }
 }
