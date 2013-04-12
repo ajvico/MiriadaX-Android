@@ -12,6 +12,7 @@ import java.util.Vector;
 import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 
 
 public class AlmacenPuntuacionesFicheroExterno
@@ -20,9 +21,13 @@ public class AlmacenPuntuacionesFicheroExterno
    private static String FICHERO = Environment.getExternalStorageDirectory()
       + "/puntuaciones.txt";
 
+   private Context context;
 
-   public AlmacenPuntuacionesFicheroExterno()
+
+   public AlmacenPuntuacionesFicheroExterno(
+      Context context)
    {
+      this.context = context;
    }
 
 
@@ -30,6 +35,16 @@ public class AlmacenPuntuacionesFicheroExterno
    {
       try
       {
+         String stadoSD = Environment.getExternalStorageState();
+         if (!stadoSD.equals(Environment.MEDIA_MOUNTED))
+         {
+            Toast.makeText(
+               context,
+               "No puedo escribir en la memoria externa",
+               Toast.LENGTH_LONG).show();
+            return;
+         }
+
          FileOutputStream f = new FileOutputStream(FICHERO, true);
          String texto = puntos + " " + nombre + "\n";
          f.write(texto.getBytes());
@@ -45,6 +60,18 @@ public class AlmacenPuntuacionesFicheroExterno
    public Vector<String> listaPuntuaciones(int cantidad)
    {
       Vector<String> result = new Vector<String>();
+
+      String stadoSD = Environment.getExternalStorageState();
+      if (!stadoSD.equals(Environment.MEDIA_MOUNTED)
+         && !stadoSD.equals(Environment.MEDIA_MOUNTED_READ_ONLY))
+      {
+         Toast.makeText(
+            context,
+            "No puedo leer en la memoria externa",
+            Toast.LENGTH_LONG).show();
+         return result;
+      }
+
       try
       {
          FileInputStream f = new FileInputStream(FICHERO);

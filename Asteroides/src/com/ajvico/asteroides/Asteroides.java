@@ -139,7 +139,7 @@ public class Asteroides
             break;
             
          case 3:
-            almacen = new AlmacenPuntuacionesFicheroExterno();
+            almacen = new AlmacenPuntuacionesFicheroExterno(this);
             break;
 
          default:
