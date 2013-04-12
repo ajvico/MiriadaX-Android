@@ -15,11 +15,13 @@
       <item>Array</item>
       <item>Preferencias</item>
       <item>Archivo interno</item>
+      <item>Archivo externo</item>
    </string-array>
    <string-array name="tiposAlmacenesValores">
       <item>0</item>
       <item>1</item>
       <item>2</item>
+      <item>3</item>
    </string-array>
 
 </resources>
