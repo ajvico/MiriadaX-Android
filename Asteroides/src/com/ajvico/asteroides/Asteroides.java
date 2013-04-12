@@ -141,6 +141,10 @@ public class Asteroides
          case 3:
             almacen = new AlmacenPuntuacionesFicheroExterno(this);
             break;
+            
+         case 4:
+            almacen = new AlmacenPuntuacionesRecurso(this);
+            break;
 
          default:
             almacen = new AlmacenPuntuacionesArray();
