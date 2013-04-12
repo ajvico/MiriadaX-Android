@@ -36,6 +36,11 @@ public class Asteroides
     */
    private MediaPlayer mp;
 
+   /**
+    * Preferencias de la aplicación.
+    */
+   SharedPreferences pref;
+
 
    /**
     * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -45,6 +50,11 @@ public class Asteroides
    {
       super.onCreate(estadoGuardado);
       setContentView(R.layout.main);
+
+      // Obtenemos las preferencias actuales
+      pref = getSharedPreferences(
+         "com.ajvico.asteroides_preferences",
+         MODE_PRIVATE);
 
       // Toast.makeText(this, "onCreate", Toast.LENGTH_SHORT).show();
 
@@ -60,11 +70,6 @@ public class Asteroides
          int pos = estadoGuardado.getInt("posicion");
          mp.seekTo(pos);
       }
-
-      // Creamos un almacén para las puntuaciones
-      // almacen = new AlmacenPuntuacionesArray();
-      // almacen = new AlmacenPuntuacionesPreferencias(this);
-      almacen = new AlmacenPuntuacionesFicheroInterno(this);
 
       // Se añade un escuchador para el evento onClick del botón
       // "Sobre el juego"
@@ -112,6 +117,33 @@ public class Asteroides
    }
 
 
+   /**
+    * Crea un almacén para la puntuaciones.
+    * El tipo del almacén se selecciona en las preferencias.
+    */
+   private void crearAlmacen()
+   {
+      int t_almacen = Integer.parseInt(pref.getString("almacen", "0"));
+      switch (t_almacen)
+      {
+         case 0:
+            almacen = new AlmacenPuntuacionesArray();
+            break;
+
+         case 1:
+            almacen = new AlmacenPuntuacionesPreferencias(this);
+            break;
+
+         case 2:
+            almacen = new AlmacenPuntuacionesFicheroInterno(this);
+            break;
+
+         default:
+            almacen = new AlmacenPuntuacionesArray();
+      }
+   }
+
+
    @Override
    protected void onStart()
    {
@@ -125,12 +157,13 @@ public class Asteroides
    {
       // Iniciamos o reanudamos la música
       // Pero sólo si la opción está activa
-      SharedPreferences pref =
-         getSharedPreferences("com.ajvico.asteroides_preferences", MODE_PRIVATE);
       if (pref.getBoolean("musica", false))
       {
          mp.start();
       }
+
+      // Creamos el almacén en función de las preferencias
+      crearAlmacen();
 
       super.onResume();
       // Toast.makeText(this, "onResume", Toast.LENGTH_SHORT).show();
