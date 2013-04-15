@@ -149,6 +149,10 @@ public class Asteroides
          case 5:
             almacen = new AlmacenPuntuacionesXML_SAX(this);
             break;
+            
+         case 6:
+            almacen = new AlmacenPuntuacionesSQLite(this);
+            break;
 
          default:
             almacen = new AlmacenPuntuacionesArray();
