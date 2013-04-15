@@ -88,11 +88,22 @@ public class AlmacenPuntuacionesSQLite
       SQLiteDatabase db = getReadableDatabase();
 
       // Creamos un cursor para leer las puntuaciones
+      // Cursor cursor =
+      // db.rawQuery(
+      // "SELECT puntos, nombre FROM puntuaciones ORDER BY puntos DESC LIMIT "
+      // + cantidad,
+      // null);
+      String[] CAMPOS = { "puntos", "nombre" };
       Cursor cursor =
-         db.rawQuery(
-            "SELECT puntos, nombre FROM puntuaciones ORDER BY puntos DESC LIMIT "
-               + cantidad,
-            null);
+         db.query(
+            "puntuaciones",
+            CAMPOS,
+            null,
+            null,
+            null,
+            null,
+            "puntos DESC",
+            Integer.toString(cantidad));
 
       // Recorremos el cursor
       while (cursor.moveToNext())
