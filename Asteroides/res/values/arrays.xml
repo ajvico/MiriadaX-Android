@@ -19,6 +19,7 @@
       <item>Recurso</item>
       <item>Archivo XML (SAX)</item>
       <item>Base de datos</item>
+      <item>Servidor vía sockets</item>
    </string-array>
    <string-array name="tiposAlmacenesValores">
       <item>0</item>
@@ -28,6 +29,7 @@
       <item>4</item>
       <item>5</item>
       <item>6</item>
+      <item>7</item>
    </string-array>
 
 </resources>

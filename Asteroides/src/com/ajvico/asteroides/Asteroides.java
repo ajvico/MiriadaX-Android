@@ -153,6 +153,10 @@ public class Asteroides
          case 6:
             almacen = new AlmacenPuntuacionesSQLite(this);
             break;
+            
+         case 7:
+            almacen = new AlmacenPuntuacionesSocket();
+            break;
 
          default:
             almacen = new AlmacenPuntuacionesArray();
